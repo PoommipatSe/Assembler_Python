@@ -1,6 +1,9 @@
 import re   #import regex matching
+
 fixedzero7 = "0000000" #reserve for 32-25th bits
 fixedzero13 = "0000000000000"
+fixedzero16 = "0000000000000000"
+fixedzero22 = "0000000000000000000000"
 
 inst_table = {  #instruction table
     "add"   :   "000",
@@ -77,6 +80,7 @@ def file_prepare(filename1, filename2):
 
 if __name__ == '__main__':
 
+
     filename1 = "test.txt"
     filename2 = "processFile.txt"
 
@@ -89,6 +93,7 @@ if __name__ == '__main__':
 
     processFile = open(filename2, "r")
 
+    pc = 0  #tracking line which it's working on
     for text in processFile:
         word = text.split()
         if len(word) == 0:  #skip the blank line
@@ -103,48 +108,48 @@ if __name__ == '__main__':
             destReg = reg_table[word[4]]
             machine_code = str(int(fixedzero7+opcode+regA+regB+fixedzero13+destReg, 2))
             print(machine_code)
+
         elif word[1] in ["sw", "lw", "beq"]:    #I-type format (3 parameters with offsetField)
-            print(word[1])
+            #zero(7) / opcode(3) / regA(3) / regB(3) / offsetField(16)
+            opcode = inst_table[word[1]]
+            regA = reg_table[word[2]]
+            regB = reg_table[word[3]]
+
+            if word[4] in label_table:  #checking if the offsetfield is a label or a number
+                #if it is label, look up from label-table and calculate the jump range (adress label - (pc+1))
+                offsetField_temp = int(label_table[word[4]]) - (pc+1)
+            else:
+                offsetField_temp = word[4]
+
+            offsetField = format(int(offsetField_temp) % (1 << 16), '016b') #extend an integer to 2's complement 16-bits
+            machine_code = str(int(fixedzero7+opcode+regA+regB+offsetField, 2))
+            print(machine_code)
+
+        elif word[1] in ["jalr"]:   #J-type format (3 parameters with fixed-zero)
+            #zero(7) / opcode(3) / regA(3) / regB(3) / zero(16)
+            opcode = inst_table[word[1]]
+            regA = reg_table[word[2]]
+            regB = reg_table[word[3]]
+            machine_code = str(int(fixedzero7+opcode+regA+regB+fixedzero16, 2))
+            print(machine_code)
+
         elif word[1] in ["halt", "noop"]:   #O-type format (0 parameter)
-            print(word[1])
+            #zero(7) / opcode(3) / zero(22)
+            opcode = inst_table[word[1]]
+            machine_code = str(int(fixedzero7+opcode+fixedzero22, 2))
+            print(machine_code)
+
         elif word[1] in [".fill"]:  #special format (1 parameter)
-            print(word[1])
+            if word[2] in label_table:
+                machine_code = label_table[word[2]]
+            else:
+                machine_code = word[2]
+
+            print(machine_code)
+
+        pc += 1
 
     processFile.close()
 
 
-
-
-    '''
-    inputFile = open("test.txt", "r")
-
-    line_count = 0
-    for text in inputFile:
-        text = filter_comment(text)
-        word = text.split()
-
-        print(text)
-        if word[0] in label_table:  #has label
-            if word[1] == ".fill":
-                if word[2] in label_table:  #stAddr .fill   start
-                    machine_code = label_table[word[2]]
-                elif word[2].lstrip("-").isdigit():     #five   .fill   5
-                    machine_code = word[2]
-                else:
-                    raise ValueError("Undefine label")
-
-
-
-        if word[0] in inst_table:   #no label
-            if word[0] in {"sw", "lw", "beq"}:
-                if word[3] in label_table and -32768 <= (label_table[word[3]]) << 32767:
-                    offsetField = label_table[word[3]]
-                    print(offsetField)
-
-        line_count += 1
-
-    inputFile.close()
-
-
-    '''
 
