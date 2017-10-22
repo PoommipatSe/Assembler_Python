@@ -77,23 +77,11 @@ def file_prepare(filename1, filename2):
     processFile.close()
     inputFile.close()
 
-
-if __name__ == '__main__':
-
-
-    filename1 = "test.txt"
-    filename2 = "processFile.txt"
-
-    # Prepare the input-file
-    # -symbolic address (making a Dict for label declaration)
-    # -exception handling (label duplication, undefine label, undefine opcode)
-    file_prepare(filename1, filename2)
-    print("===================== prepare complete =======================")
-
+def file_assembling(filename2, filename3):
 
     processFile = open(filename2, "r")
-
-    pc = 0  #tracking line which it's working on
+    outputFile = open(filename3, "w")
+    pc = 0  #tracking line which the program is working on
     for text in processFile:
         word = text.split()
         if len(word) == 0:  #skip the blank line
@@ -107,7 +95,7 @@ if __name__ == '__main__':
             regB = reg_table[word[3]]
             destReg = reg_table[word[4]]
             machine_code = str(int(fixedzero7+opcode+regA+regB+fixedzero13+destReg, 2))
-            print(machine_code)
+            #print(machine_code)
 
         elif word[1] in ["sw", "lw", "beq"]:    #I-type format (3 parameters with offsetField)
             #zero(7) / opcode(3) / regA(3) / regB(3) / offsetField(16)
@@ -121,9 +109,13 @@ if __name__ == '__main__':
             else:
                 offsetField_temp = word[4]
 
+            if int(offsetField_temp) < -32768 or int(offsetField_temp) > 32767:
+                #checking offsetField range if it is between -32768 to 32767
+                raise ValueError("offsetField is out of range")
+
             offsetField = format(int(offsetField_temp) % (1 << 16), '016b') #extend an integer to 2's complement 16-bits
             machine_code = str(int(fixedzero7+opcode+regA+regB+offsetField, 2))
-            print(machine_code)
+            #print(machine_code)
 
         elif word[1] in ["jalr"]:   #J-type format (3 parameters with fixed-zero)
             #zero(7) / opcode(3) / regA(3) / regB(3) / zero(16)
@@ -131,25 +123,50 @@ if __name__ == '__main__':
             regA = reg_table[word[2]]
             regB = reg_table[word[3]]
             machine_code = str(int(fixedzero7+opcode+regA+regB+fixedzero16, 2))
-            print(machine_code)
+            #print(machine_code)
 
         elif word[1] in ["halt", "noop"]:   #O-type format (0 parameter)
             #zero(7) / opcode(3) / zero(22)
             opcode = inst_table[word[1]]
             machine_code = str(int(fixedzero7+opcode+fixedzero22, 2))
-            print(machine_code)
+            #print(machine_code)
 
         elif word[1] in [".fill"]:  #special format (1 parameter)
             if word[2] in label_table:
                 machine_code = label_table[word[2]]
             else:
                 machine_code = word[2]
+            #print(machine_code)
 
-            print(machine_code)
-
+        print(machine_code)
+        outputFile.write(str(machine_code)+"\n")
         pc += 1
 
     processFile.close()
+    outputFile.close()
+
+if __name__ == '__main__':
+
+    filename1 = "test.txt"          #assembly input file
+    filename2 = "processFile.txt"   #processing file (the program works on this file)
+    filename3 = "machine_code.txt"  #assembly output file
+
+    # Prepare the input-file
+    # -symbolic address (making a Dict for label declaration)
+    # -exception handling (
+    #   -label duplication,
+    #   -undefine label,
+    #   -undefine opcode)
+    file_prepare(filename1, filename2)
+    print("===================== file preparing is complete =======================")
+
+
+    # translate aseembly code to machine language
+    # -16-bits range checking
+    # -2's complement 16-bits for I-type instructions is implemented
+    file_assembling(filename2, filename3)
+    print("===================== file assembling is complete =======================")
+
 
 
 
