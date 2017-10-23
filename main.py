@@ -53,24 +53,31 @@ def file_prepare(filename1, filename2):
         text = filter_comment(text)
         word = text.split()
 
+        if len(word) == 0:
+            continue
+        if len(word) == 1 and word[0] not in inst_table:
+            raise ValueError("Undefine Opcode:", word[0])
+        elif len(word) == 2 and word[1] not in inst_table:
+            raise ValueError("Undefine Opcode:", word[1])
+
         if word[0] in inst_table:
             temp_asm = "@Label"+text+"\n"
             print("@Label"+text)
             processFile.write(temp_asm)
-        else:
-            if word[1] in inst_table:
-                if re.match("^[a-zA-Z]{1,6}", word[0]):
-                    if word[0] not in label_table:
-                        #print(text + " ### has label : " + word[0] + " at address : ", line_count, "{0:b}".format(line_count))
-                        label_table[word[0]] = line_count
-                        print(text)
-                        processFile.write(text)
-                    else:
-                        raise ValueError("duplicate label")
+
+        elif word[1] in inst_table:
+            if re.match("^[a-zA-Z][a-zA-Z0-9]{1,6}$", word[0]):
+                if word[0] not in label_table:
+                    label_table[word[0]] = line_count
+                    print(text)
+                    processFile.write(text)
                 else:
-                    raise ValueError("regex exception label")
+                    raise ValueError("Duplicate label", word[0])
             else:
-                raise ValueError("undefine opcode")
+                raise ValueError("Regex exception label", word[0])
+        else:
+            raise ValueError("Undefine opcode", word[1])
+
 
         line_count += 1
 
@@ -105,13 +112,18 @@ def file_assembling(filename2, filename3):
 
             if word[4] in label_table:  #checking if the offsetfield is a label or a number
                 #if it is label, look up from label-table and calculate the jump range (adress label - (pc+1))
-                offsetField_temp = int(label_table[word[4]]) - (pc+1)
-            else:
+                if word[1] == "beq":
+                    offsetField_temp = int(label_table[word[4]]) - (pc+1)
+                else:   #sw,lw instruction
+                    offsetField_temp = int(label_table[word[4]])
+            elif word[4].lstrip('-').isdigit():
                 offsetField_temp = word[4]
+            else:
+                raise ValueError("Undefine label:", word[4])
 
             if int(offsetField_temp) < -32768 or int(offsetField_temp) > 32767:
                 #checking offsetField range if it is between -32768 to 32767
-                raise ValueError("offsetField is out of range")
+                raise ValueError("OffsetField is out of range:", word[4])
 
             offsetField = format(int(offsetField_temp) % (1 << 16), '016b') #extend an integer to 2's complement 16-bits
             machine_code = str(int(fixedzero7+opcode+regA+regB+offsetField, 2))
