@@ -13,6 +13,7 @@ typedef struct stateStruct {
 } stateType;
 
 stateType init();
+int retrieveBits(int , int, int);
 
 int main(int argc, char *argv[]) {
     char line[MAXLINELENGTH];
@@ -50,4 +51,17 @@ stateType init() {
     memset(state.reg, 0, sizeof state.reg);
     state.numMemory = 0;
     return state;
+}
+
+int nthBit(int n, int regValue) {
+    return (((1 << n) & regValue) >> n);
+}
+
+int retrieveBits(int most, int least, int regValue) {
+    int num = 0;
+    for (int len = 0; least <= most; ++least, ++len) {
+        int bit = nthBit(least, regValue);
+        num = (bit << len) | num; 
+    }
+    return num;
 }
