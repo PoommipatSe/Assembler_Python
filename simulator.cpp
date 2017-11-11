@@ -16,7 +16,7 @@ stateType init();
 
 int main(int argc, char *argv[]) {
     char line[MAXLINELENGTH];
-    stateType stat = init();
+    stateType state = init();
     FILE *filePtr;
 
     if (argc != 2) {
@@ -31,6 +31,13 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
+    for (state.numMemory = 0; fgets(line, MAXLINELENGTH, filePtr) != NULL; state.numMemory++) {
+        if (sscanf(line, "%d", state.mem+state.numMemory) != 1) {
+            printf("error in reading address %d\n", state.numMemory);
+        } else {
+            printf("memory[%d]=%d\n", state.numMemory, state.mem[state.numMemory]);
+        }
+    }
 
     fclose(filePtr);
 
