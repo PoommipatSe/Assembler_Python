@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     int rt = retrieveBits(18, 16, machineCode);
 
     state = action(opCode, rs, rt, machineCode, state);
-
+    
     fclose(filePtr);
 
     return 0;
@@ -79,10 +79,17 @@ stateType add(int rs, int rt, int rd, stateType state) {
     return state;
 }
 
+stateType nand(int rs, int rt, int rd, stateType state) {
+    state.reg[rd] =  ~(state.reg[rs] & state.reg[rt]);
+    return state;
+}
+
 stateType rType(int opCode, int rs, int rt, int machineCode, stateType state) {
     int rd = retrieveBits(2, 0, machineCode);
     if (opCode == 0) {
         return add(rs, rt, rd, state);
+    } else {
+        return nand(rs, rt, rd, state);
     }
 }
 
