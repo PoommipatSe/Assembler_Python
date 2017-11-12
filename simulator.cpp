@@ -15,6 +15,7 @@ typedef struct stateStruct {
 stateType init();
 int retrieveBits(int , int, int);
 stateType action(int, int, int, int, stateType);
+void printReg(stateType);
 
 int main(int argc, char *argv[]) {
     char line[MAXLINELENGTH];
@@ -47,7 +48,7 @@ int main(int argc, char *argv[]) {
     int rt = retrieveBits(18, 16, machineCode);
 
     state = action(opCode, rs, rt, machineCode, state);
-    
+
     fclose(filePtr);
 
     return 0;
@@ -93,8 +94,16 @@ stateType rType(int opCode, int rs, int rt, int machineCode, stateType state) {
     }
 }
 
+stateType load(int rs, int rt, int offset, stateType state) {
+    state.reg[rt] = state.mem[state.reg[rs] + offset];
+    return state;
+}
+
 stateType iType(int opCode, int rs, int rt, int machineCode, stateType state) {
     int offset = retrieveBits(15, 0, machineCode);
+    if (opCode == 2) {
+        return load(rs, rt, offset, state);
+    }
     return state;
 }
 
@@ -104,4 +113,11 @@ stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
     } else if (opCode <= 4) {
         return iType(opCode, rs, rt, machineCode, state);
     }
+}
+
+void printReg(stateType state) {
+    for(auto s : state.reg) {
+        printf("%d ", s);
+    }
+    printf("\n");
 }
