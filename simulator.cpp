@@ -99,10 +99,17 @@ stateType load(int rs, int rt, int offset, stateType state) {
     return state;
 }
 
+stateType store(int rs, int rt, int offset, stateType state) {
+    state.mem[state.reg[rs] + offset] = state.reg[rt];
+    return state;
+}
+
 stateType iType(int opCode, int rs, int rt, int machineCode, stateType state) {
     int offset = retrieveBits(15, 0, machineCode);
     if (opCode == 2) {
         return load(rs, rt, offset, state);
+    } else if (opCode == 3) {
+        return store(rs, rt, offset, state);
     }
     return state;
 }
