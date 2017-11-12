@@ -14,6 +14,7 @@ typedef struct stateStruct {
 
 stateType init();
 int retrieveBits(int , int, int);
+stateType action(int, int, int, int, stateType);
 
 int main(int argc, char *argv[]) {
     char line[MAXLINELENGTH];
@@ -40,6 +41,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    int machineCode  = 655361;
+    int opCode = retrieveBits(24, 22, machineCode);
+    int rs = retrieveBits(21, 19, machineCode);
+    int rt = retrieveBits(18, 16, machineCode);
+
+    state = action(opCode, rs, rt, machineCode, state);
+
     fclose(filePtr);
 
     return 0;
@@ -64,4 +72,15 @@ int retrieveBits(int most, int least, int regValue) {
         num = (bit << len) | num; 
     }
     return num;
+}
+
+stateType rType(int opCode, int rs, int rt, int machineCode, stateType state) {
+    int rd = retrieveBits(2, 0, machineCode);
+    return state;
+}
+
+stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
+    if (opCode <= 1) {
+        return rType(opCode, rs, rt, machineCode, state);
+    }
 }
