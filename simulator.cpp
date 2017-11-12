@@ -74,9 +74,16 @@ int retrieveBits(int most, int least, int regValue) {
     return num;
 }
 
+stateType add(int rs, int rt, int rd, stateType state) {
+    state.reg[rd] = state.reg[rs] + state.reg[rt];
+    return state;
+}
+
 stateType rType(int opCode, int rs, int rt, int machineCode, stateType state) {
     int rd = retrieveBits(2, 0, machineCode);
-    return state;
+    if (opCode == 0) {
+        return add(rs, rt, rd, state);
+    }
 }
 
 stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
