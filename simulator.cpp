@@ -42,13 +42,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int machineCode  = 8454151;
+    int machineCode  = 16842754;
     int opCode = retrieveBits(24, 22, machineCode);
     int rs = retrieveBits(21, 19, machineCode);
     int rt = retrieveBits(18, 16, machineCode);
 
     state = action(opCode, rs, rt, machineCode, state);
-
+    
     fclose(filePtr);
 
     return 0;
@@ -108,14 +108,24 @@ stateType store(int rs, int rt, int offset, stateType state) {
     return state;
 }
 
+stateType beq(int rs, int rt, int offset, stateType state) {
+    if (state.reg[rs] == state.reg[rt]) {
+        state.pc += offset + 1;
+    } else {
+        state.pc += 1;
+    }
+    return state;
+}
+
 stateType iType(int opCode, int rs, int rt, int machineCode, stateType state) {
     int offset = retrieveBits(15, 0, machineCode);
     if (opCode == 2) {
         return load(rs, rt, offset, state);
     } else if (opCode == 3) {
         return store(rs, rt, offset, state);
+    } else {
+        return beq(rs, rt, offset, state);
     }
-    return state;
 }
 
 stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
