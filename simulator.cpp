@@ -77,11 +77,13 @@ int retrieveBits(int most, int least, int regValue) {
 
 stateType add(int rs, int rt, int rd, stateType state) {
     state.reg[rd] = state.reg[rs] + state.reg[rt];
+    state.pc += 1;
     return state;
 }
 
 stateType nand(int rs, int rt, int rd, stateType state) {
     state.reg[rd] =  ~(state.reg[rs] & state.reg[rt]);
+    state.pc += 1;
     return state;
 }
 
@@ -96,11 +98,13 @@ stateType rType(int opCode, int rs, int rt, int machineCode, stateType state) {
 
 stateType load(int rs, int rt, int offset, stateType state) {
     state.reg[rt] = state.mem[state.reg[rs] + offset];
+    state.pc += 1;
     return state;
 }
 
 stateType store(int rs, int rt, int offset, stateType state) {
     state.mem[state.reg[rs] + offset] = state.reg[rt];
+    state.pc += 1;
     return state;
 }
 
