@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     int rt = retrieveBits(18, 16, machineCode);
 
     state = action(opCode, rs, rt, machineCode, state);
-    
+
     fclose(filePtr);
 
     return 0;
@@ -60,6 +60,13 @@ stateType init() {
     memset(state.reg, 0, sizeof state.reg);
     state.numMemory = 0;
     return state;
+}
+
+ int convertNum(int num)  {
+    /* convert a 16-bit number into a 32-bit integer */
+    if (num & (1<<15) ) num -= (1<<16);
+
+    return(num);
 }
 
 int nthBit(int n, int regValue) {
@@ -97,18 +104,21 @@ stateType rType(int opCode, int rs, int rt, int machineCode, stateType state) {
 }
 
 stateType load(int rs, int rt, int offset, stateType state) {
+    offset = convertNum(offset);
     state.reg[rt] = state.mem[state.reg[rs] + offset];
     state.pc += 1;
     return state;
 }
 
 stateType store(int rs, int rt, int offset, stateType state) {
+    offset = convertNum(offset);
     state.mem[state.reg[rs] + offset] = state.reg[rt];
     state.pc += 1;
     return state;
 }
 
 stateType beq(int rs, int rt, int offset, stateType state) {
+    offset = convertNum(offset);
     if (state.reg[rs] == state.reg[rt]) {
         state.pc += offset + 1;
     } else {
