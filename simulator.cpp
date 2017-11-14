@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int machineCode  = 16842754;
+    int machineCode  = 21626880;
     int opCode = retrieveBits(24, 22, machineCode);
     int rs = retrieveBits(21, 19, machineCode);
     int rt = retrieveBits(18, 16, machineCode);
@@ -128,11 +128,19 @@ stateType iType(int opCode, int rs, int rt, int machineCode, stateType state) {
     }
 }
 
+stateType jType(int opCode, int rs, int rt, stateType state) {
+    state.reg[rt] = state.pc + 1;
+    state.pc = state.reg[rs];
+    return state; 
+}
+
 stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
     if (opCode <= 1) {
         return rType(opCode, rs, rt, machineCode, state);
     } else if (opCode <= 4) {
         return iType(opCode, rs, rt, machineCode, state);
+    } else if (opCode == 5) {
+        return jType(opCode, rs, rt, state);
     }
 }
 
