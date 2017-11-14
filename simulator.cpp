@@ -12,14 +12,17 @@ typedef struct stateStruct {
     int numMemory;
 } stateType;
 
+bool isHalted = false;
+
 stateType init();
 int retrieveBits(int , int, int);
 stateType action(int, int, int, int, stateType);
-void printReg(stateType);
+void printState(stateType *);
 
 int main(int argc, char *argv[]) {
     char line[MAXLINELENGTH];
     stateType state = init();
+    int numberOfInstruction = 0;
     FILE *filePtr;
 
     if (argc != 2) {
@@ -42,13 +45,19 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int machineCode  = 21626880;
-    int opCode = retrieveBits(24, 22, machineCode);
-    int rs = retrieveBits(21, 19, machineCode);
-    int rt = retrieveBits(18, 16, machineCode);
+    while (!isHalted) {
+        int machineCode = state.mem[state.pc];
+        int opCode = retrieveBits(24, 22, machineCode);
+        int rs = retrieveBits(21, 19, machineCode);
+        int rt = retrieveBits(18, 16, machineCode);
+        printState(&state);
+        state = action(opCode, rs, rt, machineCode, state);
+        ++numberOfInstruction;
+    }
 
-    state = action(opCode, rs, rt, machineCode, state);
-
+    printf("machine halted\ntotal of %d instructions executed\nfinal state of machine:", numberOfInstruction);
+    printState(&state);
+    
     fclose(filePtr);
 
     return 0;
@@ -144,6 +153,14 @@ stateType jType(int opCode, int rs, int rt, stateType state) {
     return state; 
 }
 
+stateType oType(int opCode, stateType state) {
+    if (opCode == 6) {
+        state.pc += 1;
+        isHalted = true;
+    }
+    return state;
+}
+
 stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
     if (opCode <= 1) {
         return rType(opCode, rs, rt, machineCode, state);
@@ -151,12 +168,22 @@ stateType action(int opCode, int rs, int rt, int machineCode, stateType state) {
         return iType(opCode, rs, rt, machineCode, state);
     } else if (opCode == 5) {
         return jType(opCode, rs, rt, state);
+    } else {
+        return oType(opCode, state);
     }
 }
 
-void printReg(stateType state) {
-    for(auto s : state.reg) {
-        printf("%d ", s);
-    }
-    printf("\n");
+void printState(stateType *statePtr) {
+    int i;
+    printf("\n@@@\nstate:\n");
+    printf("\tpc %d\n", statePtr->pc);
+    printf("\tmemory:\n");
+	for (i=0; i<statePtr->numMemory; i++) {
+	    printf("\t\tmem[ %d ] %d\n", i, statePtr->mem[i]);
+	}
+    printf("\tregisters:\n");
+	for (i=0; i<NUMREGS; i++) {
+	    printf("\t\treg[ %d ] %d\n", i, statePtr->reg[i]);
+	}
+    printf("end state\n");
 }
