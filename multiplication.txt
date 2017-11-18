@@ -1,0 +1,6 @@
+		lw	0	2	one		//$2 = 1
+		lw	0	3	mcand	//$3 = mcand
+		lw	0	4	mplier	//$4 = mplier
+done	halt
+mcand	.fill	5
+mplier	.fill	3
