@@ -1,6 +1,11 @@
 		lw	0	2	one		//$2 = 1
 		lw	0	3	mcand	//$3 = mcand
 		lw	0	4	mplier	//$4 = mplier
+		nand	2	4	5	//check0 = mplier(nand)$2
+		nand	5	5	5	//check0 = not(check0)
+		add	1	1	1		//result = result * 2
+		beg	0	5	(done)		//if($5 = 0) go to done
+		add	3	1	1		//result = result + mcand
 done	halt
 mcand	.fill	5
 mplier	.fill	3
