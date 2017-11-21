@@ -70,12 +70,13 @@ def file_prepare(filename1, filename2):
                 if word[0] not in label_table:
                     label_table[word[0]] = line_count
                     print(text)
-                    processFile.write(text)
+                    processFile.write(text+"\n")
                 else:
                     raise ValueError("Duplicate label", word[0])
             else:
                 raise ValueError("Regex exception label", word[0])
         else:
+            print(word[0] + "xxxxx")
             raise ValueError("Undefine opcode", word[1])
 
 
@@ -159,9 +160,9 @@ def file_assembling(filename2, filename3):
 
 if __name__ == '__main__':
 
-    filename1 = "test.txt"          #assembly input file
+    filename1 = "test-mul.txt"          #assembly input file
     filename2 = "processFile.txt"   #processing file (the program works on this file)
-    filename3 = "machine_code.txt"  #assembly output file
+    filename3 = "machine_code_mul.txt"  #assembly output file
 
     # Prepare the input-file
     # -symbolic address (making a Dict for label declaration)
