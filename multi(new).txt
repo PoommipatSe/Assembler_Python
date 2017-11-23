@@ -3,13 +3,13 @@
 	lw	0	4	mplier	//$4 = mplier
 	lw	0	7	one	//$7 = 1
 start   	lw	0	6	one	//$6 = 1
-	nand	2	4	5	//$5 = mplier & 1
+	nand	2	4	5	//$5 = mplier & $2
 	nand	5	5	5
-	add	1	1	1	//result = result * 2
 	beq	0	5	up	//if($5 = 0) go to up
 	add	3	1	1	//result = result + mcand
 up	add	2	2	2	//$2 = $2 * 2
 	add	6	7	7	//$7++
+	add	3	3	3	//sll mcand
 	lw  0   6   end
 	beq	7	6	done	//if($7 = 15) go to done
 	beq	0	0	start	//back to begin
