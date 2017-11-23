@@ -53,19 +53,19 @@ def file_prepare(filename1, filename2):
         text = filter_comment(text)
         word = text.split()
 
-        if len(word) == 0:
+        if len(word) == 0:  #if it is a blank line
             continue
-        if len(word) == 1 and word[0] not in inst_table:
+        if len(word) == 1 and word[0] not in inst_table:    #the single word is an undefine instruction
             raise ValueError("Undefine Opcode:", word[0])
-        elif len(word) == 2 and word[1] not in inst_table:
+        elif len(word) == 2 and word[1] not in inst_table: #a label with an undefine instruction
             raise ValueError("Undefine Opcode:", word[1])
 
-        if word[0] in inst_table:
+        if word[0] in inst_table:   #the line does not has a label
             temp_asm = "@Label"+text+"\n"
             print("@Label"+text)
             processFile.write(temp_asm)
 
-        elif word[1] in inst_table:
+        elif word[1] in inst_table: #the line has a label
             if re.match("^[a-zA-Z][a-zA-Z0-9]{1,6}$", word[0]):
                 if word[0] not in label_table:
                     label_table[word[0]] = line_count
@@ -76,7 +76,6 @@ def file_prepare(filename1, filename2):
             else:
                 raise ValueError("Regex exception label", word[0])
         else:
-            print(word[0] + "xxxxx")
             raise ValueError("Undefine opcode", word[1])
 
 
@@ -160,9 +159,9 @@ def file_assembling(filename2, filename3):
 
 if __name__ == '__main__':
 
-    filename1 = "test-mul.txt"          #assembly input file
+    filename1 = "test.txt"          #assembly input file
     filename2 = "processFile.txt"   #processing file (the program works on this file)
-    filename3 = "machine_code_mul.txt"  #assembly output file
+    filename3 = "machine_code.txt"  #assembly output file
 
     # Prepare the input-file
     # -symbolic address (making a Dict for label declaration)
