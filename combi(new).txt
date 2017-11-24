@@ -3,9 +3,9 @@
 	lw	0	6	combi	//$6 = comb
 	jalr	6	5		//call combi
 	halt
-comb	beq	0	2	end
+comb	beq	0	2	end	//if(r=0 || n=r) jump to end
 	beq	1	2	end
-	lw	0	4	one
+	lw	0	4	one	//
 	add	7	4	7
 	sw	7	1	stack
 	add	7	4	7
@@ -31,8 +31,8 @@ comb	beq	0	2	end
 	lw	7	1	stack
 	add	7	4	7
 	jalr	5	6
-end	lw	0	3	one
-	jalr	5	6
+end	lw	0	3	one	//return 1
+	jalr	5	6		//back before jump
 n	.fill	5
 r	.fill	3
 combi	.fill	comb
