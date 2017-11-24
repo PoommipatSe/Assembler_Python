@@ -125,7 +125,8 @@ def file_assembling(filename2, filename3):
                 #checking offsetField range if it is between -32768 to 32767
                 raise ValueError("OffsetField is out of range:", word[4])
 
-            offsetField = format(int(offsetField_temp) % (1 << 16), '016b') #extend an integer to 2's complement 16-bits
+            offsetField = format(int(offsetField_temp) % (1 << 16), '016b')
+            #extend an integer to 2's complement 16-bits
             machine_code = str(int(fixedzero7+opcode+regA+regB+offsetField, 2))
             #print(machine_code)
 
