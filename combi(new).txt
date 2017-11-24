@@ -15,10 +15,11 @@ comb	beq	0	2	end	//if(r=0 || n=r) jump to end
 	lw	0	4	neg	//$4 = -1
 	add	1	4	1	//n = n-1
 	jalr	6	5		//call combi(n-1 ,r)
-	add	2	4	2	//r = r-1
-	lw	0	4	one	//$4 = 1
 	add	7	4	7	//increase stack
 	sw	7	3	stack	//save value from combi(n-1 ,r)
+	lw	0	4	neg	//$4 = -1
+	add	2	4	2	//r = r-1
+	lw	0	4	one	//$4 = 1
 	jalr	6	5		//call combi(n-1 ,r-1)
 	lw	7	4	stack	//$4 = value from combi(n-1 ,r)
 	add	3	4	3	//$3 = combi(n-1 ,r) + combi(n-1 ,r-1)
