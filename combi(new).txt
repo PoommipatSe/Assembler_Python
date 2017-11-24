@@ -3,8 +3,14 @@
 	lw	0	6	combi
 	jalr	6	5
 	halt
+comb	beq	0	2	end
+	beq	1	2	end
+	...
+end	lw	0	3	one
+	jalr	5	6
 n	.fill	5
 r	.fill	3
-combi	.fill	...
+combi	.fill	comb
+one	.fill	1
 neg	.fill	-1
 stack	.fill	0
