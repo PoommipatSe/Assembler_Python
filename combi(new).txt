@@ -1,7 +1,7 @@
-	lw	0	1	n
-	lw	0	2	r
-	lw	0	6	combi
-	jalr	6	5
+	lw	0	1	n	//$1 = n
+	lw	0	2	r	//$2 = r
+	lw	0	6	combi	//$6 = comb
+	jalr	6	5		//call combi
 	halt
 comb	beq	0	2	end
 	beq	1	2	end
