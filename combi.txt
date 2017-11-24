@@ -1,30 +1,32 @@
 	lw	0	1	input1
 	lw	0	2	input2
-	lw	0	7	stAddr
-	jalr	7	4
+	lw	0	4	stAddr
+	jalr	4	7
 	halt
-start	sw	5	7	stack	
 
-	beq	0	1	return
-	beq	2	1	return
+start	beq	0	2	end
+	beq	1	2	end
 	
-	lw	0	6	neg
+	sw	5	7	stack
+	
+	lw	0	6	neg1
 	add	1	6	1
 	
-	lw	0	6	one
+	lw	0	6	pos1
 	add	5	6	5	
 	sw	5	1	stack	
 	
 	add	5	6	5
 	sw	5	2	stack	
 	
-	lw	0	7	stAddr
-	jalr	7	4		
+	lw	0	4	stAddr
+	jalr	4	7		
 	
+	lw	0	6	pos1
 	add	5	6	5	
 	sw	5	3	stack	
 	
-	lw	0	6	neg
+	lw	0	6	neg1
 	add	5	6	5
 	lw	5	2	stack	
 	
@@ -36,28 +38,30 @@ start	sw	5	7	stack
 	lw	0	4	stAddr
 	jalr	4	7
 
-	lw	0	6	three
+	lw	0	6	pos1
+	add	5	6	5
+	add	5	6	5
 	add	5	6	5
 	lw	5	4	stack
 	
 	add	3	4	3
 
+	lw	0	6	neg1
+	add	5	6	5
+	add	5	6	5
+	add	5	6	5
 	lw	5	7	stack
 	jalr	7	4
-	
-	
 		
-return	lw	0	3	one
+end	lw	0	3	pos1
 	jalr	7	4
 	
-zero	.fill	0
-input1	.fill	5	
+input1	.fill	3	
 input2	.fill	2
-neg	.fill	-1
-one	.fill	1
+neg1	.fill	-1
+pos1	.fill	1
 three	.fill	3
-loadN	.fill	-1
-loadR	.fill	-2
-reAddr	.fill	return
+neg3	.fill	-3
+four	.fill	4
 stAddr	.fill	start
 stack 	.fill	0
