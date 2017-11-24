@@ -1,0 +1,10 @@
+	lw	0	1	n
+	lw	0	2	r
+	lw	0	6	combi
+	jalr	6	5
+	halt
+n	.fill	5
+r	.fill	3
+combi	.fill	...
+neg	.fill	-1
+stack	.fill	0
