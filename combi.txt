@@ -1,11 +1,40 @@
+	lw	0	0	zero
+	lw	0	1	input1
+	lw	0	2	input2
+	lw	0	4	stAddr
+	lw	0	6	one
+	jalr	4	7
+	halt
+start	beq	0	1	return
+	noop
+	beq	2	1	return
+	add	1	6	1
+	add	2	6	2
+sub4n	sw	7	4	stack
+	add	7	6	7
+	sw	7	1	stack
+	add	7	6	7
+	
+	
+
+
+
+return	lw	0	3	one
+	beq	0	0	done
+		
+done	halt
+zero	.fill	0
+input1	.fill	7	
+input2	.fill	3
+neg	.fill	-1
+one	.fill	1
+reAddr	.fill	return
+stAddr	.fill	start
+
 	lw	0	5	pos1	//$5 = 1
 	lw	0	1	input	//$1 = memory[input]
 	lw	0	2	subAdr  //prepare to call sub4n. $2=sub4n
 	jalr	2	4               //call sub4n; $4=return address; $3=answer
-	lw	0	5	pos1    //$5 = 1
-	lw	0	1	input   //$1 = memory[input]
-	lw	0	2	subAdr  //prepare to call sub4n. $2=sub4n
-	jalr	2       4               //call sub4n; $4=return address; $3=answer
 	halt
 sub4n   sw	7	4	stack      //save return address on stack
         add	7	5	7          //increment stack pointer
