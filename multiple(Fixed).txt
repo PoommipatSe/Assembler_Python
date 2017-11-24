@@ -1,15 +1,13 @@
-	lw	0	1	zero
 	lw	0	2	mcand
 	lw	0	3	mplier
 	lw	0	4	neg
-start	add	2	1	1
+start	add	1	2	1
 	add	3	4	3
 	beq	0	3	done
 	beq	0	0	start
 	noop
 done	halt
-zero	.fill	0
 mcand	.fill	452
-mplier	.fill	20
+mplier	.fill	50
 neg	.fill	-1
 stAddr	.fill	start
