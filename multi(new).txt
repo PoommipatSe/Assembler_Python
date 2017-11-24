@@ -7,11 +7,11 @@ start   	lw	0	6	one	//$6 = 1
 	nand	5	5	5
 	beq	0	5	up	//if($5 = 0) go to up
 	add	3	1	1	//result = result + mcand
-up	add	2	2	2	//$2 = $2 * 2
-	add	6	7	7	//$7++
-	add	3	3	3	//sll mcand
-	lw  0   6   end
+up	lw  	0   	6   	end
 	beq	7	6	done	//if($7 = 15) go to done
+	add	2	2	2	//$2 = $2 * 2
+	add	3	3	3	//sll mcand
+	add	6	7	7	//$7++
 	beq	0	0	start	//back to begin
 done	halt
 mcand	.fill	5
