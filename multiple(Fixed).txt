@@ -1,0 +1,15 @@
+	lw	0	1	input1
+	lw	0	2	input2
+	lw	0	3	neg
+	lw	0	4	zero
+start	add	1	4	4
+	add	2	3	2
+	beq	0	2	done
+	beq	0	0	start
+	noop
+done	halt
+input1	.fill	1024
+input2	.fill	1024
+neg	.fill	-1
+zero	.fill	0
+stAddr	.fill	start
