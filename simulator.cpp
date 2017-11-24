@@ -12,7 +12,7 @@ typedef struct stateStruct {
     int numMemory;
 } stateType;
 
-bool isHalted = false;
+bool isHalt = false;
 
 stateType init();
 int retrieveBits(int , int, int);
@@ -45,14 +45,14 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    while (!isHalted) {
+    while (!isHalt) {
         int machineCode = state.mem[state.pc];
-        int opCode = retrieveBits(24, 22, machineCode);
-        int rs = retrieveBits(21, 19, machineCode);
-        int rt = retrieveBits(18, 16, machineCode);
+        int opCode = retrieveBits(24, 22, machineCode);         // get opcode
+        int rs = retrieveBits(21, 19, machineCode);             // get rs
+        int rt = retrieveBits(18, 16, machineCode);             // get rt
         printState(&state);
-        state = action(opCode, rs, rt, machineCode, state);
-        ++numberOfInstruction;
+        state = action(opCode, rs, rt, machineCode, state);     // execute
+        ++numberOfInstruction;                                  // increment instruction counter
     }
 
     printf("machine halted\ntotal of %d instructions executed\nfinal state of machine:", numberOfInstruction);
@@ -63,10 +63,11 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-stateType init() {
+stateType init() {                              
+    //initial state
     stateType state;
     state.pc = 0;
-    memset(state.reg, 0, sizeof state.reg);
+    memset(state.reg, 0, sizeof state.reg);     //set all register to zero
     state.numMemory = 0;
     return state;
 }
@@ -78,11 +79,13 @@ stateType init() {
     return(num);
 }
 
-int nthBit(int n, int regValue) {
+int nthBit(int n, int regValue) {      
+    //get nth bit
     return (((1 << n) & regValue) >> n);
 }
 
 int retrieveBits(int most, int least, int regValue) {
+    //get bits from leastth to mostth
     int num = 0;
     for (int len = 0; least <= most; ++least, ++len) {
         int bit = nthBit(least, regValue);
@@ -91,7 +94,7 @@ int retrieveBits(int most, int least, int regValue) {
     return num;
 }
 
-stateType add(int rs, int rt, int rd, stateType state) {
+stateType add(int rs, int rt, int rd, stateType state) { 
     state.reg[rd] = state.reg[rs] + state.reg[rt];
     state.pc += 1;
     return state;
@@ -156,7 +159,7 @@ stateType jType(int opCode, int rs, int rt, stateType state) {
 stateType oType(int opCode, stateType state) {
     if (opCode == 6) {
         state.pc += 1;
-        isHalted = true;
+        isHalt = true;
     }
     return state;
 }
