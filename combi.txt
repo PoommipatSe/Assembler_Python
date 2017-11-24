@@ -38,17 +38,13 @@ start	beq	0	2	end
 	lw	0	4	stAddr
 	jalr	4	7
 
-	lw	0	6	pos1
-	add	5	6	5
-	add	5	6	5
+	lw	0	6	three
 	add	5	6	5
 	lw	5	4	stack
 	
 	add	3	4	3
 
-	lw	0	6	neg1
-	add	5	6	5
-	add	5	6	5
+	lw	0	6	neg3
 	add	5	6	5
 	lw	5	7	stack
 	jalr	7	4
@@ -62,6 +58,5 @@ neg1	.fill	-1
 pos1	.fill	1
 three	.fill	3
 neg3	.fill	-3
-four	.fill	4
 stAddr	.fill	start
 stack 	.fill	0
