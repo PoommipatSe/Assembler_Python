@@ -5,7 +5,6 @@
 	halt
 comb	beq	0	2	end
 	beq	1	2	end
-
 	lw	0	4	one
 	add	7	4	7
 	sw	7	1	stack
@@ -13,8 +12,25 @@ comb	beq	0	2	end
 	sw	7	2	stack
 	add	7	4	7
 	sw	7	5	stack
-	
-
+	lw	0	4	neg
+	add	1	4	1
+	jalr	6	5
+	add	2	4	2
+	lw	0	4	one
+	add	7	4	7
+	sw	7	3	stack
+	jalr	6	5
+	lw	7	4	stack
+	add	3	4	3
+	lw	0	4	neg
+	add	7	4	7
+	lw	7	5	stack
+	add	7	4	7
+	lw	7	2	stack
+	add	7	4	7
+	lw	7	1	stack
+	add	7	4	7
+	jalr	5	6
 end	lw	0	3	one
 	jalr	5	6
 n	.fill	5
