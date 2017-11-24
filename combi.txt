@@ -1,4 +1,3 @@
-	lw	0	0	zero
 	lw	0	1	input1
 	lw	0	2	input2
 	lw	0	7	stAddr
@@ -48,8 +47,7 @@ sub4n	sw	4	7	stack
 		
 return	lw	0	3	one
 	jalr	7	4
-	
-zero	.fill	0
+
 input1	.fill	7	
 input2	.fill	3
 neg	.fill	-1
