@@ -32,9 +32,9 @@ comb	beq	0	2	end	//if(r=0 || n=r) jump to end
 	add	7	4	7	//decrease stack
 	lw	7	1	stack	//restore n
 	add	7	4	7	//decrease stack
-	jalr	5	6		//jump back
+	jalr	5	4		//jump back
 end	lw	0	3	one	//return 1
-	jalr	5	6		//jump back
+	jalr	5	4		//jump back
 nn	.fill	5
 rr	.fill	3
 combi	.fill	comb
