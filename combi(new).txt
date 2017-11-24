@@ -5,7 +5,16 @@
 	halt
 comb	beq	0	2	end
 	beq	1	2	end
-	...
+
+	lw	0	4	one
+	add	7	4	7
+	sw	7	1	stack
+	add	7	4	7
+	sw	7	2	stack
+	add	7	4	7
+	sw	7	5	stack
+	
+
 end	lw	0	3	one
 	jalr	5	6
 n	.fill	5
