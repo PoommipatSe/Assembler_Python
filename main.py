@@ -160,7 +160,7 @@ def file_assembling(filename2, filename3):
 
 if __name__ == '__main__':
 
-    filename1 = "combi.txt"          #assembly input file
+    filename1 = "combi(new).txt"          #assembly input file
     filename2 = "processFile.txt"   #processing file (the program works on this file)
     filename3 = "machine_code_combi.txt"  #assembly output file
 

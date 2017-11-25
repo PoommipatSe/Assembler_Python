@@ -1,92 +1,50 @@
-@Label	lw	0	1	input1
-
-@Label	lw	0	2	input2
-
-@Label	lw	0	4	stAddr
-
-@Label	jalr	4	7
-
+@Label	lw	0	1	nn	
+@Label	lw	0	2	rr	
+@Label	lw	0	6	combi	
+@Label	jalr	6	5		
 @Label	halt
 
-start	beq	0	2	end
-
+comb	beq	0	2	end	
 @Label	beq	1	2	end
 
-@Label	sw	5	7	stack
+@Label	lw	0	4	one	
+@Label	add	7	4	7	
+@Label	sw	7	1	stack	
+@Label	add	7	4	7	
+@Label	sw	7	2	stack	
+@Label	add	7	4	7	
+@Label	sw	7	5	stack	
+@Label	lw	0	4	neg	
+@Label	add	1	4	1	
+@Label	jalr	6	5		
+@Label	lw	0	4	one	
+@Label	add	7	4	7	
+@Label	sw	7	3	stack	
+@Label	lw	0	4	neg	
+@Label	add	2	4	2	
+@Label	lw	0	4	one	
+@Label	jalr	6	5		
+@Label	lw	7	4	stack	
+@Label	add	3	4	3	
+@Label	lw	0	4	neg	
+@Label	add	7	4	7	
+@Label	lw	7	5	stack	
+@Label	add	7	4	7	
+@Label	lw	7	2	stack	
+@Label	add	7	4	7	
+@Label	lw	7	1	stack	
+@Label	add	7	4	7	
+@Label	jalr	5	4		
+end	lw	0	3	one	
+@Label	jalr	5	4		
+nn	.fill	5
 
-@Label	lw	0	6	neg1
+rr	.fill	3
 
-@Label	add	1	6	1
+combi	.fill	comb
 
-@Label	lw	0	6	pos1
+one	.fill	1
 
-@Label	add	5	6	5	
+neg	.fill	-1
 
-@Label	sw	5	1	stack	
-
-@Label	add	5	6	5
-
-@Label	sw	5	2	stack	
-
-@Label	lw	0	4	stAddr
-
-@Label	jalr	4	7		
-
-@Label	lw	0	6	pos1
-
-@Label	add	5	6	5	
-
-@Label	sw	5	3	stack	
-
-@Label	lw	0	6	neg1
-
-@Label	add	5	6	5
-
-@Label	lw	5	2	stack	
-
-@Label	add	2	6	2	
-
-@Label	add	5	6	5
-
-@Label	lw	5	1	stack	
-
-@Label	lw	0	4	stAddr
-
-@Label	jalr	4	7
-
-@Label	lw	0	6	three
-
-@Label	add	5	6	5
-
-@Label	lw	5	4	stack
-
-@Label	add	3	4	3
-
-@Label	lw	0	6	neg3
-
-@Label	add	5	6	5
-
-@Label	lw	5	7	stack
-
-@Label	jalr	7	4
-
-end	lw	0	3	pos1
-
-@Label	jalr	7	4
-
-input1	.fill	3	
-
-input2	.fill	2
-
-neg1	.fill	-1
-
-pos1	.fill	1
-
-three	.fill	3
-
-neg3	.fill	-3
-
-stAddr	.fill	start
-
-stack 	.fill	0
-
+stack	.fill	0
